@@ -84,9 +84,9 @@ const addRole = () => {
         ])
         .then((answers) => {
             const {roleName, roleSalary, roleDepartment} = answers
-            console.log(roleName)
-            console.log(roleSalary)
-            console.log(roleDepartment)
+            // console.log(roleName)
+            // console.log(roleSalary)
+            // console.log(roleDepartment)
             db.query('INSERT INTO roles (roles.title, roles.salary, roles.department_id) VALUES (?, ?, ?);', [roleName, roleSalary, roleDepartment])
             .then(() => {
                 console.log(`New Role ${answers.roleName} Added.`)
@@ -147,9 +147,9 @@ const addEmployee = () => {
         ])
         .then((answers) => {
             let {newFirstName, newLastName, newEmployeeRole, newEmployeeManager} = answers
-            console.log(newFirstName)
-            console.log(newLastName)
-            console.log(newEmployeeRole, newEmployeeManager)
+            // console.log(newFirstName)
+            // console.log(newLastName)
+            // console.log(newEmployeeRole, newEmployeeManager)
             if (newEmployeeManager === -1) {
                 db.query('INSERT INTO employees (employees.first_name, employees.last_name, employees.role_id) VALUES (?, ?, ?);', [newFirstName, newLastName, newEmployeeRole])
             .then(() => {
@@ -211,8 +211,8 @@ const updateEmployee = () => {
     ])
         .then((answers) => {
                 let {changeRole, updateRole} = answers
-                console.log(changeRole)
-                console.log(updateRole)
+                // console.log(changeRole)
+                // console.log(updateRole)
                 db.query('UPDATE employees SET role_id=? WHERE employees.id=?;', [updateRole, changeRole])
             .then(() => {
                 console.log(`Role Updated`)
