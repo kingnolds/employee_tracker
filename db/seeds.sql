@@ -1,4 +1,4 @@
-INSERT INTO departments (name)
+INSERT INTO departments (department_name)
 VALUES ('Sales'),
        ('Finance'),
        ('Engineering'),
@@ -20,5 +20,5 @@ VALUES ("Hannibal", "Smith", 1, null),
        ("BA", "Baracus", 7, 1),
        ("Rocky", "Squirrel", 6, null),
        ("Bullwinkle", "Moose", 7, 6),
-       ("Dick", "Grayson", 4, null)
+       ("Dick", "Grayson", 4, null),
        ("Tim", "Drake", 5, 7);
