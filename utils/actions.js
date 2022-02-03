@@ -1,14 +1,15 @@
 const db = require("../config/connection");
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2')
 const inquirer = require("inquirer");
 const cTable = require('console.table');
+
 
 // Function for each option, view options show a table of available info
 //              add options ask for inputs and have lists of availibel departmnets and roles
 
 
-const viewDepartments = async () => {
-    await db.query('SELECT * FROM departments;', (err, data) => {
+const viewDepartments = () => {
+     db.query('SELECT * FROM departments;', (err, data) => {
         console.table(data)
     if (err) {console.log(err)}
 })
@@ -53,17 +54,15 @@ const addDepartment = () => {
 // })
 const addRole = () => {
         const arr = [];
-        db.query('SELECT * FROM departments').spread(function (rows) {
-            
-            rows.forEach(dept => {
+        db.query('SELECT * FROM roles', ((err, results) =>{
+            results.forEach(role => {
                 const obj = {
-                    name: dept.department_name,
-                    value: dept.id
+                    name: role.title,
+                    value: role.id
                 }
                 arr.push(obj);
             });
-        })
-        .then(
+        }))
         inquirer.prompt([
             {
                 type: 'input',
@@ -87,39 +86,38 @@ const addRole = () => {
             console.log(roleName)
             console.log(roleSalary)
             console.log(roleDepartment)
-            db.query('INSERT INTO roles (roles.title, roles.salary, roles.department_id) VALUES (?, ?, ?);', [roleName, roleSalary, roleDepartment])
-            .then(() => {
+            db.query('INSERT INTO roles (roles.title, roles.salary, roles.department_id) VALUES (?, ?, ?);', [roleName, roleSalary, roleDepartment], (err, data) => {
                 console.log(`New Role ${answers.roleName} Added.`)
             })
+                
+            })
             
-        })
-        )
-}
+        }
+        
+
 
 const addEmployee = () => {
         const arr = [];
         const arr2 = [{ name: "None", value: -1 }];
-        db.query('SELECT * FROM roles').spread(function (rows) {
-            
-            rows.forEach(role => {
+        db.query('SELECT * FROM roles', ((err, results) =>{
+            results.forEach(role => {
                 const obj = {
                     name: role.title,
                     value: role.id
                 }
                 arr.push(obj);
             });
-        })
+        }))
         .then(
-        db.query('SELECT * FROM employees').spread(function (rows) {
-            
-            rows.forEach(emp => {
+        db.query('SELECT * FROM employees', ((err, results) => {
+            results.forEach(emp => {
                 const obj = {
                     name: emp.first_name + " " + emp.last_name,
                     value: emp.id
                 }
                 arr2.push(obj);
             });
-        }))
+        })))
         .then(
         inquirer.prompt([
             {
@@ -170,25 +168,25 @@ const addEmployee = () => {
 const updateEmployee = () => {
     const arr = [];
     const arr2 = [];
-    db.query('SELECT * FROM roles').spread(function (rows) {  
-        rows.forEach(role => {
+    db.query('SELECT * FROM roles', ((err, results) =>{
+        results.forEach(role => {
             const obj = {
                 name: role.title,
                 value: role.id
             }
             arr.push(obj);
         });
-    })
+    }))
     .then(
-    db.query('SELECT * FROM employees').spread(function (rows) {
-        rows.forEach(emp => {
+    db.query('SELECT * FROM employees', ((err, results) => {
+        results.forEach(emp => {
             const obj = {
                 name: emp.first_name + " " + emp.last_name,
                 value: emp.id
             }
             arr2.push(obj);
         });
-    }))
+    })))
     .then(
     inquirer.prompt([
         {
