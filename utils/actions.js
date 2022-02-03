@@ -1,13 +1,14 @@
 const db = require("../config/connection");
 const mysql = require('mysql2/promise');
 const inquirer = require("inquirer");
+const cTable = require('console.table');
 
 // Function for each option, view options show a table of available info
 //              add options ask for inputs and have lists of availibel departmnets and roles
 
 
-const viewDepartments = () => {
-     db.query('SELECT * FROM departments;', (err, data) => {
+const viewDepartments = async () => {
+    await db.query('SELECT * FROM departments;', (err, data) => {
         console.table(data)
     if (err) {console.log(err)}
 })
@@ -27,16 +28,17 @@ const viewRoles = () => {
 })
 }
 
-const addDepartment = async () => {
-    const answer = await inquirer.prompt([{
+const addDepartment = () => {
+    inquirer.prompt([{
         type: 'input',
         message: 'Enter the name of the Department',
         name: 'department'
     }])
-    db.query('INSERT INTO departments (department_name) VALUES (?);', answer.department, (err, data) => {
+    .then((answer) => {
+        db.query('INSERT INTO departments (department_name) VALUES (?);', answer.department)
         console.log(`New Department ${answer.department} Added.`)
-    if (err) {console.log(err)}
     })
+    
 }
 // db.query('SELECT * FROM departments').spread(function (rows) {
 //     const arr = [];
@@ -168,8 +170,7 @@ const addEmployee = () => {
 const updateEmployee = () => {
     const arr = [];
     const arr2 = [];
-    db.query('SELECT * FROM roles').spread(function (rows) {
-        
+    db.query('SELECT * FROM roles').spread(function (rows) {  
         rows.forEach(role => {
             const obj = {
                 name: role.title,
@@ -180,7 +181,6 @@ const updateEmployee = () => {
     })
     .then(
     db.query('SELECT * FROM employees').spread(function (rows) {
-        
         rows.forEach(emp => {
             const obj = {
                 name: emp.first_name + " " + emp.last_name,
@@ -190,21 +190,40 @@ const updateEmployee = () => {
         });
     }))
     .then(
-        inquirer.prompt([
-            { 
-                type: 'list',
-                message: "What Employee is changing roles?",
-                name: 'changeRole',
-                when: (answers) => (answers.choice === 'Update an Employee Role')
-            },
-            {
-                type: 'list',
-                message: "What is the Employee's new role?",
-                name: 'updateRole',
-                when: (answers) => (answers.choice === 'Update an Employee Role')
-            },
-        ])
+    inquirer.prompt([
+        {
+        type: 'confirm',
+        message: "You want to change an Employee's role?",
+        name: 'yes',
+        },
+        { 
+            type: 'list',
+            message: "What Employee is changing roles?",
+            name: 'changeRole',
+            choices: arr2
+        },
+        {
+            type: 'list',
+            message: "What is the Employee's new role?",
+            name: 'updateRole',
+            choices: arr
+        }
+    ])
+        .then((answers) => {
+                let {changeRole, updateRole} = answers
+                console.log(changeRole)
+                console.log(updateRole)
+                db.query('UPDATE employees SET role_id=? WHERE employees.id=?;', [updateRole, changeRole])
+            .then(() => {
+                console.log(`Role Updated`)
+            })
+                
+                
+            }
+        )
     )
 }
 
-addEmployee()
+
+
+module.exports = { viewDepartments, viewEmployees, viewRoles, addDepartment, addRole, addEmployee, updateEmployee }
