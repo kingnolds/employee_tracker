@@ -1,7 +1,7 @@
 const db = require("../config/connection");
-const mysql = require('mysql2/promise');
 const inquirer = require("inquirer");
 const cTable = require('console.table');
+
 
 // Function for each option, view options show a table of available info
 //              add options ask for inputs and have lists of availibel departmnets and roles
