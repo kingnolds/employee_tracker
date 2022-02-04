@@ -15,10 +15,10 @@ npm i
 `  
 
 ## Usage
-This is used by opening the sql files in the db directory with mysql and then running `node index.js` in an integrated terminal of the main directory and answering the prompts. Currently after every command the app must be exited with ctrl + C and restarted with `node index.js`
+This is used by opening the sql files in the db directory with mysql and then running `node index.js` in an integrated terminal of the main directory and answering the prompts. 
 
 ### Demonstration
-[![Demonstration Video](./images/DemonstrationGif.gif)](https://watch.screencastify.com/v/aVHxk2KZLBOtjexcmF15)
+[![Demonstration Video](./images/DemonstrationGif.gif)](https://watch.screencastify.com/v/18GTtdGlZGBAxkaLILQO)
 
 ## Credits
 
