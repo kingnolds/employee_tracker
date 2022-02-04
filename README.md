@@ -24,8 +24,8 @@ This is used by opening the sql files in the db directory with mysql and then ru
 
 nodeJS
 https://nodejs.org/en/  
-Bootstrap
-https://getbootstrap.com/
+NPM
+https://www.npmjs.com/
 
 NPM libraries: mysql2-promise, inquirer, ctable, CFont
 
